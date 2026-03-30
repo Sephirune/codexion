@@ -34,11 +34,11 @@ static void load_and_validate(char **argv, t_sim *sim)
     sim->scheduler = (strcmp(argv[8], "edf") == 0);
 
     if (sim->numbers_of_coders < 1)
-        return (print_error("numbers_of_coders must be, at least, 1."));
+        print_error("numbers_of_coders must be, at least, 1.");
     if (sim->time_to_burnout < 1)
-        return (print_error("time_to_burnout must be, at least, 1."));
+        print_error("time_to_burnout must be, at least, 1.");
     if (sim->compiles_required < 1)
-        return (print_error("numbers_of_compiles must be, at least, 1."));
+        print_error("numbers_of_compiles must be, at least, 1.");
 }
 
 int parse_args(int argc, char **argv, t_sim *sim)
