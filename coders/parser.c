@@ -46,16 +46,16 @@ int parse_args(int argc, char **argv, t_sim *sim)
     int i;
 
     if (argc != 9)
-        print_error("Error: Must be exactly 8 arguments.");
+        print_error("Must be exactly 8 arguments.");
     i = 1;
     while (i < 8)
     {
         if (!is_unsigned(argv[i]))
-            print_error("Error: Invalid argument.");
+            print_error("Invalid argument.");
         i++;
     }
     if (strcmp(argv[8], "fifo") != 0 && strcmp(argv[8], "edf") != 0)
-        print_error("Error: Scheduler must be \"fifo\" or \"edf\"");
+        print_error("Scheduler must be \"fifo\" or \"edf\"");
     
     load_and_validate(argv, sim);
     return (0);
