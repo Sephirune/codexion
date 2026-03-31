@@ -48,7 +48,7 @@ static void	load_and_validate(char **argv, t_sim *sim)
 	if (sim->time_to_burnout < 1)
 		print_error("time_to_burnout must be, at least, 1.");
 	if (sim->compiles_required < 1)
-		print_error("numbers_of_compiles must be, at least, 1.");
+		print_error("compiles_required must be, at least, 1.");
 }
 
 int	parse_args(int argc, char **argv, t_sim *sim)
