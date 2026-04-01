@@ -21,9 +21,32 @@ typedef struct s_sim
     int             scheduler; // para fifo (first in/out) es = 0, para edf (earlier deadline first) = 1
     int             stop;
     long long       start_time;
-    pthread_mutex_t log_mutex;
+	pthread_mutex_t	log_mutex; // protege los prints
+	t_dongle		*dongles;
+	t_coder			*coder;
 }   t_sim;
 
-int parse_args(int argc, char **argv, t_sim *sim);
+typedef struct	s_dongle
+{
+	pthread_mutex_t mutex;
+	pthread_cond_t	cond;
+	int				free; // checker para ver si está ocupado
+	long long		released_ts; // cuándo fue liberado
+}	t_dongle;
 
-#endif;
+typedef struct s_coder
+{
+	int				id;
+	pthread_t		thread;
+	t_sim			*sim;
+	long long		last_compile_start;
+	int				n_compiles;
+	t_dongle		*left_dongle;
+	t_dongle		*right_dongle;
+}	t_coder;
+
+
+int	parse_args(int argc, char **argv, t_sim *sim);
+void	precise_sleep(long long ms);
+
+#endif

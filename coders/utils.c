@@ -28,12 +28,12 @@ long long elapsed_ms(long long start_ms)
 	return (calculate_ms() - start_ms);
 }
 
-void    calculate_sleep(long long ms)
+void    calculate_sleep(long long ms) // pauses the thread to prevent burnouts
 {
 	long long	start;
 	long long	current;
 	
-	start = get_time_ms();
+	start = calculate_ms();
 	while (1)
 	{
 		current = get_time_ms();
