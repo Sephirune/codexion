@@ -42,3 +42,5 @@ void    calculate_sleep(long long ms) // pauses the thread to prevent burnouts
 		usleep(100);
 	}
 }
+
+void	print_log(t_coder *coder, char *str)

@@ -48,5 +48,6 @@ typedef struct s_coder
 
 int	parse_args(int argc, char **argv, t_sim *sim);
 void	precise_sleep(long long ms);
+long long	calculate_ms(void);
 
 #endif
