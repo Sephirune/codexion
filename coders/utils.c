@@ -36,7 +36,7 @@ void    calculate_sleep(long long ms) // pauses the thread to prevent burnouts
 	start = calculate_ms();
 	while (1)
 	{
-		current = get_time_ms();
+		current = calculate_ms();
 		if (current - start >= ms)
 			break;
 		usleep(100);
@@ -44,3 +44,18 @@ void    calculate_sleep(long long ms) // pauses the thread to prevent burnouts
 }
 
 void	print_log(t_coder *coder, char *str)
+{
+	long long	ts;
+	
+	pthread_mutex_lock(&coder->sim->log_mutex);
+	ts = calculate_ms() - coder->sim->start_time;
+	if (coder->sim->stop == 1)
+		return;
+	else
+	{
+		pthread_mutex_lock(&coder->sim->log_mutex);
+		printf("%lld %d %s\n", ts, coder->id, str);
+		
+	}
+	pthread_mutex_unlock(&coder->sim->log_mutex);
+}
