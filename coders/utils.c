@@ -23,12 +23,12 @@ long long	calculate_ms(void)
 	return (seconds + useconds);
 }
 
-long long elapsed_ms(long long start_ms)
+long long	elapsed_ms(long long start_ms)
 {
 	return (calculate_ms() - start_ms);
 }
 
-void    calculate_sleep(long long ms) // pauses the thread to prevent burnouts
+void	calculate_sleep(long long ms) // pauses the thread to prevent burnouts
 {
 	long long	start;
 	long long	current;
