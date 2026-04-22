@@ -16,8 +16,8 @@ void	dongle_order(t_dongle *dongle, t_sim *sim)
 	pthread_mutex_lock(&dongle->mutex);
 	while (dongle->free == 0 || calculate_ms() - dongle->released_ts < sim->dongle_cooldown)
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
-		dongle->free = 0;
-		pthread_mutex_unlock(&dongle->mutex);
+	dongle->free = 0;
+	pthread_mutex_unlock(&dongle->mutex);
 }
 
 void	fix_order(t_coder *coder, t_sim *sim)
