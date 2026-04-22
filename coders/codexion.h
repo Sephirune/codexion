@@ -57,6 +57,7 @@ void		print_log(t_coder *coder, char *str);
 void    	dongle_order(t_dongle *dongle, t_sim *sim);
 void    	fix_order(t_coder *coder, t_sim *sim);
 void    	free_dongle(t_dongle *dongle);
+void		*coder_routine(void *arg);
 
 
 #endif

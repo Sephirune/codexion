@@ -38,7 +38,7 @@ void	fix_order(t_coder *coder, t_sim *sim)
 	}
 }
 
-void    free_dongle(t_dongle *dongle)
+void	free_dongle(t_dongle *dongle)
 {
 	pthread_mutex_lock(&dongle->mutex);
 	dongle->free = 1;
