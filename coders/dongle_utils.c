@@ -14,9 +14,10 @@
 void	dongle_order(t_dongle *dongle, t_sim *sim)
 {
 	pthread_mutex_lock(&dongle->mutex);
-	while (dongle->free == 0 || calculate_ms() - dongle->released_ts < sim->dongle_cooldown)
+	while ((dongle->free == 0 || calculate_ms() - dongle->released_ts < sim->dongle_cooldown) && sim->stop == 0)
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
-	dongle->free = 0;
+	if (sim->stop == 0)
+		dongle->free = 0;
 	pthread_mutex_unlock(&dongle->mutex);
 }
 

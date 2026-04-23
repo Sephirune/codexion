@@ -1,31 +1,32 @@
-SRC_DIR = src
+NAME		= codexion
+CC		= cc
+CFLAGS		= -Wall -Wextra -Werror -pthread
+RM		= rm -f
 
-SRCS			=	$(SRC_DIR)/coders/parser.c\
+SRCS		= parser.c \
+		  coder.c \
+		  dongle_utils.c \
+		  monitor.c \
+		  sim_init.c \
+		  utils.c \
+		  main.c
 
+OBJS		= $(SRCS:.c=.o)
 
-OBJS			=	$(SRCS:.c=.o)
+all: $(NAME)
 
-CC			=	cc
-RM			=	rm -f
-CFLAGS			=	-Wall -Wextra -Werror -I -pthread
-
-NAME			=	codexion
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all:			$(NAME)
-
-$(NAME):	$(OBJS) $(PUSH_SWAP_OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-
 clean:
-	$(RM) $(OBJS) $(PUSH_SWAP_OBJS) $(CHECKER_OBJS)
+	$(RM) $(OBJS)
 
-fclean:	clean
-	$(RM) $(NAME) $(BONUS_NAME)
+fclean: clean
+	$(RM) $(NAME)
 
-re:			fclean 
-			$(NAME) all
+re: fclean all
 
-.PHONY:			all clean fclean re
+.PHONY: all clean fclean re

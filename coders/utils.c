@@ -50,12 +50,10 @@ void	print_log(t_coder *coder, char *str)
 	pthread_mutex_lock(&coder->sim->log_mutex);
 	ts = calculate_ms() - coder->sim->start_time;
 	if (coder->sim->stop == 1)
-		return;
-	else
 	{
-		pthread_mutex_lock(&coder->sim->log_mutex);
-		printf("%lld %d %s\n", ts, coder->id, str);
-		
+		pthread_mutex_unlock(&coder->sim->log_mutex);
+		return;
 	}
+	printf("%lld %d %s\n", ts, coder->id, str);
 	pthread_mutex_unlock(&coder->sim->log_mutex);
 }

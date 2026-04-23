@@ -33,5 +33,16 @@ void	*monitor_all(void *arg)
 		}
 		usleep(1000);
 	}
+	if (sim->stop == 1)
+	{
+		i = 0;
+		while (i < sim->numbers_of_coders)
+		{
+			pthread_mutex_lock(&sim->dongles[i].mutex);
+			pthread_cond_broadcast(&sim->dongles[i].cond);
+			pthread_mutex_unlock(&sim->dongles[i].mutex);
+			i++;
+		}
+	}
 	return (NULL);
 }

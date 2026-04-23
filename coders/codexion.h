@@ -9,6 +9,10 @@
 # include <pthread.h>
 # include <sys/time.h>
 
+typedef struct s_dongle t_dongle;
+typedef struct s_coder t_coder;
+typedef struct s_sim	t_sim;
+
 typedef struct s_sim
 {
     int             numbers_of_coders;
@@ -49,15 +53,15 @@ typedef struct s_coder
 
 
 int			parse_args(int argc, char **argv, t_sim *sim);
-void		precise_sleep(long long ms);
 long long	calculate_ms(void);
-long long 	elapsed_ms(long long start_ms);
-void    	calculate_sleep(long long ms);
+long long	elapsed_ms(long long start_ms);
+void		calculate_sleep(long long ms);
 void		print_log(t_coder *coder, char *str);
-void    	dongle_order(t_dongle *dongle, t_sim *sim);
-void    	fix_order(t_coder *coder, t_sim *sim);
-void    	free_dongle(t_dongle *dongle);
+void		dongle_order(t_dongle *dongle, t_sim *sim);
+void		fix_order(t_coder *coder, t_sim *sim);
+void		free_dongle(t_dongle *dongle);
 void		*coder_routine(void *arg);
-
+int			init_sim(t_sim *sim);
+void		*monitor_all(void *arg);
 
 #endif

@@ -20,7 +20,7 @@ static int	init_mutex(t_sim *sim)
 	sim->start_time = calculate_ms();
 	if (pthread_mutex_init(&sim->log_mutex, NULL) != 0)
 		return (1);
-		sim->dongles = malloc(sim->numbers_of_coders * sizeof(t_dongle));
+	sim->dongles = malloc(sim->numbers_of_coders * sizeof(t_dongle));
 	if (!sim->dongles)
 		return (1);
 	while (i < sim->numbers_of_coders)
@@ -57,5 +57,14 @@ static int	aux_coders(t_sim *sim)
 			sim->coder[i].right_dongle = &sim->dongles[i + 1];
 		i++;
 	}
+	return (0);
+}
+
+int	init_sim(t_sim *sim)
+{
+	if (init_mutex(sim) != 0)
+		return (1);
+	if (aux_coders(sim) != 0)
+		return (1);
 	return (0);
 }
