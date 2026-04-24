@@ -28,6 +28,7 @@ void	fix_order(t_coder *coder, t_sim *sim)
 		dongle_order(coder->right_dongle, sim);
 		print_log(coder, "has taken a dongle");
 		dongle_order(coder->left_dongle, sim);
+		print_log(coder, "has taken a dongle");
 	}
 	else
 	{

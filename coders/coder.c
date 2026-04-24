@@ -19,7 +19,6 @@ void	*coder_routine(void *arg) //pthread_create demands that the function must b
 	while (coder->sim->stop != 1)
 	{
 		fix_order(coder, coder->sim);
-		print_log(coder, "has taken a dongle");
 		coder->last_compile_start = calculate_ms();
 		print_log(coder, "is compiling");
 		calculate_sleep(coder->sim->time_to_compile);
