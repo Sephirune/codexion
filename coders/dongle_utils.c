@@ -21,8 +21,26 @@ void	dongle_order(t_dongle *dongle, t_sim *sim)
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
+void	fix_single_dongle(t_coder *coder, t_sim *sim)
+{
+	t_dongle	*first;
+	t_dongle	*second;
+
+	if (coder->id == sim->numbers_of_coders)
+	{
+		first = coder->right_dongle;
+		second = coder->left_dongle;
+	}
+	else
+	{
+		first = coder -> left_dongle;
+		second = coder-> right_dongle;
+	}
+}
+
 void	fix_order(t_coder *coder, t_sim *sim)
 {
+	fix_single_dongle(coder, sim);
 	if (coder->id == sim->numbers_of_coders)
 	{
 		dongle_order(coder->right_dongle, sim);
