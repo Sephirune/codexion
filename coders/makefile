@@ -9,7 +9,8 @@ SRCS		= parser.c \
 		  monitor.c \
 		  sim_init.c \
 		  utils.c \
-		  main.c
+		  main.c \
+		  queue.c
 
 OBJS		= $(SRCS:.c=.o)
 

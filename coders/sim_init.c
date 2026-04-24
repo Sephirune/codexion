@@ -27,6 +27,8 @@ static int	init_mutex(t_sim *sim)
 	{
 		sim->dongles[i].free = 1;
 		sim->dongles[i].released_ts = 0;
+		sim->dongles[i].queue = malloc(sim->numbers_of_coders * sizeof(t_coder *));
+		sim->dongles[i].queue_size = 0;
 		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
 			return (1);
 		if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)

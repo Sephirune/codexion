@@ -57,11 +57,13 @@ long long	calculate_ms(void);
 long long	elapsed_ms(long long start_ms);
 void		calculate_sleep(long long ms);
 void		print_log(t_coder *coder, char *str);
-void		dongle_order(t_dongle *dongle, t_sim *sim);
+void		dongle_order(t_dongle *dongle, t_sim *sim, t_coder *coder);
 void		fix_order(t_coder *coder, t_sim *sim);
 void		free_dongle(t_dongle *dongle);
 void		*coder_routine(void *arg);
 int			init_sim(t_sim *sim);
 void		*monitor_all(void *arg);
+void    	enqueue(t_dongle *dongle, t_coder *coder);
+t_coder 	*dequeue(t_dongle *dongle);
 
 #endif

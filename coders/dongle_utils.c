@@ -11,13 +11,17 @@
 /* ************************************************************************** */
 #include "codexion.h"
 
-void	dongle_order(t_dongle *dongle, t_sim *sim)
+void	dongle_order(t_dongle *dongle, t_sim *sim, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->mutex);
-	while ((dongle->free == 0 || calculate_ms() - dongle->released_ts < sim->dongle_cooldown) && sim->stop == 0)
+	enqueue(dongle, coder);
+	while ((dongle->free == 0 || calculate_ms() - dongle->released_ts < sim->dongle_cooldown || dongle->queue[0] != coder) && sim->stop == 0)
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 	if (sim->stop == 0)
-		dongle->free = 0;
+	{
+        dongle->free = 0;
+        dongle->free = 0;
+    }
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
@@ -36,9 +40,9 @@ void    fix_order(t_coder *coder, t_sim *sim)
         first = coder->left_dongle;
         second = coder->right_dongle;
     }
-    dongle_order(first, sim);
+    dongle_order(first, sim, coder);
     print_log(coder, "has taken a dongle");
-    dongle_order(second, sim);
+    dongle_order(second, sim, coder);
     print_log(coder, "has taken a dongle");
 }
 
