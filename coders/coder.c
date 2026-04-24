@@ -16,6 +16,8 @@ void	*coder_routine(void *arg) //pthread_create demands that the function must b
 	t_coder *coder;
 
 	coder = (t_coder *)arg; //cast to fix the parameter that the function recieves
+    if (coder->id % 2 == 0)
+		calculate_sleep(30);
 	while (coder->sim->stop != 1)
 	{
 		fix_order(coder, coder->sim);
