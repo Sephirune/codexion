@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "codexion.h"
 
-long long	calculate_ms(void)
+long long	calculate_ms(void) // returns the current time in milliseconds
 {
 	struct timeval tv; // tv returns the ms since the epoch
 	long long	seconds;
@@ -28,7 +28,7 @@ long long	elapsed_ms(long long start_ms)
 	return (calculate_ms() - start_ms);
 }
 
-void	calculate_sleep(long long ms, t_sim *sim) // pauses the thread to prevent burnouts
+void	calculate_sleep(long long ms, t_sim *sim) // pauses the thread to prevent burnouts and also checks if the simulation is stopped to avoid that the threads keep sleeping when the simulation is stopped
 {
     long long   start;
     long long   current;
@@ -54,7 +54,7 @@ void	print_log(t_coder *coder, char *str)
 	if (coder->sim->stop == 1)
 	{
 		pthread_mutex_unlock(&coder->sim->log_mutex);
-		return;
+		return ;
 	}
 	printf("%lld %d %s\n", ts, coder->id, str);
 	pthread_mutex_unlock(&coder->sim->log_mutex);
