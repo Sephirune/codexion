@@ -11,6 +11,20 @@
 /* ************************************************************************** */
 #include "codexion.h"
 
+static int	all_coders_done(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->numbers_of_coders)
+	{
+		if (sim->coder[i].n_compiles < sim->compiles_required)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	*monitor_all(void *arg)
 {
 	t_sim	*sim;
@@ -22,14 +36,17 @@ void	*monitor_all(void *arg)
 		i = 0;
 		while (i < sim->numbers_of_coders)
 		{
-			if ((calculate_ms() - sim->coder[i].last_compile_start) > sim->time_to_burnout)
+			if (sim->coder[i].n_compiles < sim->compiles_required
+				&& (calculate_ms() - sim->coder[i].last_compile_start) > sim->time_to_burnout)
 			{
 				print_log(&sim->coder[i], "burned out");
 				sim->stop = 1;
 			}
-			if (sim->coder[i].n_compiles >= sim->compiles_required)
-				sim->stop = 1;
 			i++;
+		}
+		if (all_coders_done(sim))
+		{
+			sim->stop = 1;
 		}
 		usleep(1000);
 	}

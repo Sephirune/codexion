@@ -23,7 +23,7 @@ typedef struct s_sim
     int             compiles_required;
     long long       dongle_cooldown;
     int             scheduler; // para fifo (first in/out) es = 0, para edf (earlier deadline first) = 1
-    int             stop;
+    volatile int    stop;
     long long       start_time;
 	pthread_mutex_t	log_mutex; // protege los prints
 	t_dongle		*dongles;
@@ -46,7 +46,7 @@ typedef struct s_coder
 	pthread_t		thread;
 	t_sim			*sim;
 	long long		last_compile_start;
-	int				n_compiles;
+	volatile int	n_compiles;
 	t_dongle		*left_dongle;
 	t_dongle		*right_dongle;
 }	t_coder;
@@ -55,7 +55,7 @@ typedef struct s_coder
 int			parse_args(int argc, char **argv, t_sim *sim);
 long long	calculate_ms(void);
 long long	elapsed_ms(long long start_ms);
-void		calculate_sleep(long long ms);
+void		calculate_sleep(long long ms, t_sim *sim);
 void		print_log(t_coder *coder, char *str);
 void		dongle_order(t_dongle *dongle, t_sim *sim, t_coder *coder);
 void		fix_order(t_coder *coder, t_sim *sim);

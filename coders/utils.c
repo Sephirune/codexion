@@ -28,19 +28,21 @@ long long	elapsed_ms(long long start_ms)
 	return (calculate_ms() - start_ms);
 }
 
-void	calculate_sleep(long long ms) // pauses the thread to prevent burnouts
+void	calculate_sleep(long long ms, t_sim *sim) // pauses the thread to prevent burnouts
 {
-	long long	start;
-	long long	current;
-	
-	start = calculate_ms();
-	while (1)
-	{
-		current = calculate_ms();
-		if (current - start >= ms)
-			break;
-		usleep(100);
-	}
+    long long   start;
+    long long   current;
+
+    start = calculate_ms();
+    while (1)
+    {
+        current = calculate_ms();
+        if (current - start >= ms)
+            break ;
+        if (sim->stop)
+            return ;
+        usleep(100);
+    }
 }
 
 void	print_log(t_coder *coder, char *str)

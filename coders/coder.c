@@ -11,24 +11,38 @@
 /* ************************************************************************** */
 #include "codexion.h"
 
-void	*coder_routine(void *arg) //pthread_create demands that the function must be declared like this
+void    *coder_routine(void *arg)
 {
-	t_coder *coder;
+    t_coder *coder;
 
-	coder = (t_coder *)arg; //cast to fix the parameter that the function recieves
-	while (coder->sim->stop != 1)
-	{
-		fix_order(coder, coder->sim);
-		coder->last_compile_start = calculate_ms();
-		print_log(coder, "is compiling");
-		calculate_sleep(coder->sim->time_to_compile);
-		free_dongle(coder->left_dongle);
-		free_dongle(coder->right_dongle);
-		print_log(coder, "is debugging");
-		calculate_sleep(coder->sim->time_to_debug);
-		print_log(coder, "is refactoring");
-		calculate_sleep(coder->sim->time_to_refactor);
-		coder->n_compiles += 1;
-	}
-	return (NULL);
+    coder = (t_coder *)arg;
+    calculate_sleep((coder->id - 1) * 50, coder->sim);
+    while (coder->sim->stop != 1)
+    {
+        fix_order(coder, coder->sim);
+        if (coder->sim->stop)
+            break ;
+        coder->last_compile_start = calculate_ms();
+        print_log(coder, "is compiling");
+        calculate_sleep(coder->sim->time_to_compile, coder->sim);
+        if (coder->left_dongle == coder->right_dongle)
+            free_dongle(coder->left_dongle);
+        else
+        {
+            free_dongle(coder->left_dongle);
+            free_dongle(coder->right_dongle);
+        }
+        if (coder->sim->stop)
+            break ;
+        print_log(coder, "is debugging");
+        calculate_sleep(coder->sim->time_to_debug, coder->sim);
+        if (coder->sim->stop)
+            break ;
+        print_log(coder, "is refactoring");
+        calculate_sleep(coder->sim->time_to_refactor, coder->sim);
+        coder->n_compiles += 1;
+        if (coder->n_compiles >= coder->sim->compiles_required)
+            break ;
+    }
+    return (NULL);
 }
