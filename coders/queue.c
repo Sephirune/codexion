@@ -17,25 +17,25 @@ static int is_earlier_deadline(t_coder *a, t_coder *b)
 void    enqueue(t_dongle *dongle, t_coder *coder)
 {
     int i;
-    int insert_pos;
+    int position;
 
     if (coder->sim->scheduler == 0)
     {
         dongle->queue[dongle->queue_size] = coder;
         dongle->queue_size++;
-        return;
+        return ;
     }
-    insert_pos = 0;
-    while (insert_pos < dongle->queue_size
-        && !is_earlier_deadline(coder, dongle->queue[insert_pos]))
-        insert_pos++;
+    position = 0;
+    while (position < dongle->queue_size
+        && !is_earlier_deadline(coder, dongle->queue[position]))
+        position++;
     i = dongle->queue_size;
-    while (i > insert_pos)
+    while (i > position)
     {
         dongle->queue[i] = dongle->queue[i - 1];
         i--;
     }
-    dongle->queue[insert_pos] = coder;
+    dongle->queue[position] = coder;
     dongle->queue_size++;
 }
 

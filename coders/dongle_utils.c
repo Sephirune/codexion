@@ -56,11 +56,11 @@ void    fix_order(t_coder *coder, t_sim *sim)
 {
     t_dongle    *first;
     t_dongle    *second;
-    int         left_idx;
-    int         right_idx;
+    int         left_index;
+    int         right_index;
 
-    left_idx = coder->left_dongle - sim->dongles;
-    right_idx = coder->right_dongle - sim->dongles;
+    left_index = coder->left_dongle - sim->dongles;
+    right_index = coder->right_dongle - sim->dongles;
     
     if (coder->left_dongle == coder->right_dongle)
     {
@@ -68,7 +68,7 @@ void    fix_order(t_coder *coder, t_sim *sim)
         print_log(coder, "has taken a dongle");
         return ;
     }
-    if (left_idx < right_idx)
+    if (left_index < right_index)
     {
         first = coder->left_dongle;
         second = coder->right_dongle;
