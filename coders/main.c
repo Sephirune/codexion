@@ -26,7 +26,8 @@ int	main(int argc, char **argv)
 	pthread_create(&thread, NULL, monitor_all, &sim);
 	while (i < sim.numbers_of_coders)
 	{
-		pthread_create(&sim.coder[i].thread, NULL, coder_routine, &sim.coder[i]);
+		pthread_create(&sim.coder[i].thread, NULL, coder_routine,
+			&sim.coder[i]);
 		i++;
 	}
 	pthread_join(thread, NULL);
@@ -35,5 +36,6 @@ int	main(int argc, char **argv)
 		pthread_join(sim.coder[j].thread, NULL);
 		j++;
 	}
+	cleanup_sim(&sim); /* FIX BUG3: free all resources after all threads end */
 	return (0);
 }

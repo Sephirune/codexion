@@ -13,7 +13,7 @@
 
 static int	init_mutex(t_sim *sim)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	sim->stop = 0;
@@ -27,7 +27,10 @@ static int	init_mutex(t_sim *sim)
 	{
 		sim->dongles[i].free = 1;
 		sim->dongles[i].released_ts = 0;
-		sim->dongles[i].queue = malloc(sim->numbers_of_coders * sizeof(t_coder *));
+		sim->dongles[i].queue = malloc(sim->numbers_of_coders
+				* sizeof(t_coder *));
+		if (!sim->dongles[i].queue)
+			return (1);
 		sim->dongles[i].queue_size = 0;
 		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
 			return (1);
@@ -40,7 +43,7 @@ static int	init_mutex(t_sim *sim)
 
 static int	aux_coders(t_sim *sim)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	sim->coder = malloc(sim->numbers_of_coders * sizeof(t_coder));
@@ -60,6 +63,28 @@ static int	aux_coders(t_sim *sim)
 		i++;
 	}
 	return (0);
+}
+
+void	cleanup_sim(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	if (sim->dongles)
+	{
+		while (i < sim->numbers_of_coders)
+		{
+			pthread_mutex_destroy(&sim->dongles[i].mutex);
+			pthread_cond_destroy(&sim->dongles[i].cond);
+			if (sim->dongles[i].queue)
+				free(sim->dongles[i].queue);
+			i++;
+		}
+		free(sim->dongles);
+	}
+	if (sim->coder)
+		free(sim->coder);
+	pthread_mutex_destroy(&sim->log_mutex);
 }
 
 int	init_sim(t_sim *sim)
