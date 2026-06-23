@@ -11,6 +11,28 @@
 /* ************************************************************************** */
 #include "codexion.h"
 
+void	cleanup_sim(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	if (sim->dongles)
+	{
+		while (i < sim->numbers_of_coders)
+		{
+			pthread_mutex_destroy(&sim->dongles[i].mutex);
+			pthread_cond_destroy(&sim->dongles[i].cond);
+			if (sim->dongles[i].queue)
+				free(sim->dongles[i].queue);
+			i++;
+		}
+		free(sim->dongles);
+	}
+	if (sim->coder)
+		free(sim->coder);
+	pthread_mutex_destroy(&sim->log_mutex);
+}
+
 int	main(int argc, char **argv)
 {
 	t_sim		sim;
@@ -36,6 +58,6 @@ int	main(int argc, char **argv)
 		pthread_join(sim.coder[j].thread, NULL);
 		j++;
 	}
-	cleanup_sim(&sim); /* FIX BUG3: free all resources after all threads end */
+	cleanup_sim(&sim);
 	return (0);
 }

@@ -11,6 +11,21 @@
 /* ************************************************************************** */
 #include "codexion.h"
 
+static int	init_dongle(t_sim *sim, int i)
+{
+	sim->dongles[i].free = 1;
+	sim->dongles[i].released_ts = 0;
+	sim->dongles[i].queue = malloc(sim->numbers_of_coders * sizeof(t_coder *));
+	if (!sim->dongles[i].queue)
+		return (1);
+	sim->dongles[i].queue_size = 0;
+	if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
+		return (1);
+	if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)
+		return (1);
+	return (0);
+}
+
 static int	init_mutex(t_sim *sim)
 {
 	int	i;
@@ -25,20 +40,20 @@ static int	init_mutex(t_sim *sim)
 		return (1);
 	while (i < sim->numbers_of_coders)
 	{
-		sim->dongles[i].free = 1;
-		sim->dongles[i].released_ts = 0;
-		sim->dongles[i].queue = malloc(sim->numbers_of_coders
-				* sizeof(t_coder *));
-		if (!sim->dongles[i].queue)
-			return (1);
-		sim->dongles[i].queue_size = 0;
-		if (pthread_mutex_init(&sim->dongles[i].mutex, NULL) != 0)
-			return (1);
-		if (pthread_cond_init(&sim->dongles[i].cond, NULL) != 0)
+		if (init_dongle(sim, i) != 0)
 			return (1);
 		i++;
 	}
 	return (0);
+}
+
+static void	set_coder_dongles(t_sim *sim, int i)
+{
+	sim->coder[i].left_dongle = &sim->dongles[i];
+	if (i + 1 == sim->numbers_of_coders)
+		sim->coder[i].right_dongle = &sim->dongles[0];
+	else
+		sim->coder[i].right_dongle = &sim->dongles[i + 1];
 }
 
 static int	aux_coders(t_sim *sim)
@@ -55,36 +70,10 @@ static int	aux_coders(t_sim *sim)
 		sim->coder[i].n_compiles = 0;
 		sim->coder[i].last_compile_start = calculate_ms();
 		sim->coder[i].sim = sim;
-		sim->coder[i].left_dongle = &sim->dongles[i];
-		if (i + 1 == sim->numbers_of_coders)
-			sim->coder[i].right_dongle = &sim->dongles[0];
-		else
-			sim->coder[i].right_dongle = &sim->dongles[i + 1];
+		set_coder_dongles(sim, i);
 		i++;
 	}
 	return (0);
-}
-
-void	cleanup_sim(t_sim *sim)
-{
-	int	i;
-
-	i = 0;
-	if (sim->dongles)
-	{
-		while (i < sim->numbers_of_coders)
-		{
-			pthread_mutex_destroy(&sim->dongles[i].mutex);
-			pthread_cond_destroy(&sim->dongles[i].cond);
-			if (sim->dongles[i].queue)
-				free(sim->dongles[i].queue);
-			i++;
-		}
-		free(sim->dongles);
-	}
-	if (sim->coder)
-		free(sim->coder);
-	pthread_mutex_destroy(&sim->log_mutex);
 }
 
 int	init_sim(t_sim *sim)

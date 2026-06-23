@@ -59,3 +59,12 @@ void	print_log(t_coder *coder, char *str)
 	printf("%lld %d %s\n", ts, coder->id, str);
 	pthread_mutex_unlock(&coder->sim->log_mutex);
 }
+
+void	free_dongle(t_dongle *dongle)
+{
+	pthread_mutex_lock(&dongle->mutex);
+	dongle->free = 1;
+	dongle->released_ts = calculate_ms();
+	pthread_cond_broadcast(&dongle->cond);
+	pthread_mutex_unlock(&dongle->mutex);
+}
